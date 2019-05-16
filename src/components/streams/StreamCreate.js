@@ -1,5 +1,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import { createStream } from '../../actions';
 
 class StreamCreate extends React.Component {
     
@@ -26,8 +28,9 @@ class StreamCreate extends React.Component {
         );
     }
 
-    onSubmit(formValues) { //no neceista preventdefault por que de eso se encarga redux form
-        
+    onSubmit = (formValues) => { //no neceista preventdefault por que de eso se encarga redux form
+        formValues.user_id = 1;
+        this.props.createStream(formValues);
     }
     render() {
         //onSubmit={this.props.handleSubmit(this.onSubmit())}: al onSubmit handler le pasamos el this.props.handleSubmit (handler de redux form) y como parametro, la funcion que creamos
@@ -54,7 +57,9 @@ const validate = (formValues) => {
     return errors;
 };
 
-export default reduxForm({
+const formWrapped = reduxForm({
     form : 'streamCreate',
     validate
 })(StreamCreate);
+
+export default connect(null, { createStream })(formWrapped);
